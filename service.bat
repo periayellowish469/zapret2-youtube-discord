@@ -661,6 +661,7 @@ if !errorlevel!==0 (
 exit /b
 
 :do_start_process
+call :cleanup_windivert
 echo   Запускаю winws2...
 start "" /D "%BASE_DIR%" /MIN "%WINWS2_EXE%" @"%ACTIVE_PRESET%"
 timeout /t 2 /nobreak >nul

@@ -1,0 +1,71 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout (CRLF preserved on Windows)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get latest tag and bump version
+        id: version
+        shell: pwsh
+        run: |
+          $tags = git tag -l --sort=-v:refname | Where-Object { $_ -match '^\d+\.\d+\.\d+$' }
+          if ($tags) {
+            $latest = $tags | Select-Object -First 1
+            $parts = $latest -split '\.'
+            $major = [int]$parts[0]
+            $minor = [int]$parts[1]
+            $patch = [int]$parts[2] + 1
+            $newVersion = "$major.$minor.$patch"
+          } else {
+            $newVersion = "1.0.0"
+          }
+          Write-Host "New version: $newVersion"
+          "VERSION=$newVersion" | Out-File -Append $env:GITHUB_OUTPUT -Encoding utf8
+
+      - name: Create archives
+        shell: pwsh
+        run: |
+          $version = "${{ steps.version.outputs.VERSION }}"
+          $archiveName = "zapret2-youtube-discord-v$version"
+          $stagingDir = "$env:RUNNER_TEMP\$archiveName"
+
+          # Copy repo to staging (exclude .git and .github)
+          robocopy . $stagingDir /E /XD .git .github /XF .gitattributes | Out-Null
+
+          # Create ZIP
+          Compress-Archive -Path $stagingDir -DestinationPath "$env:GITHUB_WORKSPACE\$archiveName.zip" -Force
+
+          # Create 7z
+          & "C:\Program Files\7-Zip\7z.exe" a -t7z -mx=9 "$env:GITHUB_WORKSPACE\$archiveName.7z" $stagingDir
+
+      - name: Create tag and release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $version = "${{ steps.version.outputs.VERSION }}"
+          $archiveName = "zapret2-youtube-discord-v$version"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag $version
+          git push origin $version
+
+          gh release create $version `
+            "$archiveName.zip" `
+            "$archiveName.7z" `
+            --title "v$version" `
+            --generate-notes
