@@ -10,8 +10,8 @@ if "%BASE_DIR:~-1%"=="\" set "BASE_DIR=%BASE_DIR:~0,-1%"
 
 set "PRESETS_DIR=%BASE_DIR%\presets"
 set "WINWS2_EXE=%BASE_DIR%\exe\winws2.exe"
-set "ACTIVE_PRESET=%BASE_DIR%\preset-active.txt"
-set "STATE_FILE=%BASE_DIR%\current_preset.txt"
+set "ACTIVE_PRESET=%BASE_DIR%\utils\preset-active.txt"
+set "STATE_FILE=%BASE_DIR%\utils\current_preset.txt"
 
 net session >nul 2>&1
 if %errorlevel% neq 0 (
