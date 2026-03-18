@@ -1,0 +1,32 @@
+# targets.txt - список целей для тестирования
+#
+# Формат:
+#   Имя = "https://host..."       -> HTTP/TLS проверки + ping
+#   Имя = "PING:1.2.3.4"          -> Только ping
+#
+# Можно добавлять/удалять строки свободно.
+
+### Discord
+DiscordMain           = "https://discord.com"
+DiscordGateway        = "https://gateway.discord.gg"
+DiscordCDN            = "https://cdn.discordapp.com"
+DiscordUpdates        = "https://updates.discord.com"
+
+### YouTube
+YouTubeWeb            = "https://www.youtube.com"
+YouTubeShort          = "https://youtu.be"
+YouTubeImage          = "https://i.ytimg.com"
+YouTubeVideo          = "https://redirector.googlevideo.com"
+
+### Google
+GoogleMain            = "https://www.google.com"
+GoogleGstatic         = "https://www.gstatic.com"
+
+### Cloudflare
+CloudflareWeb         = "https://www.cloudflare.com"
+CloudflareCDN         = "https://cdnjs.cloudflare.com"
+
+### DNS (Ping only)
+CloudflareDNS         = "PING:1.1.1.1"
+GoogleDNS             = "PING:8.8.8.8"
+Quad9DNS              = "PING:9.9.9.9"
