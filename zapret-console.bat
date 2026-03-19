@@ -1,9 +1,13 @@
 @echo off
-chcp 65001 >nul 2>&1
+%SystemRoot%\System32\chcp.com 65001 >nul 2>&1
 :: Быстрый запуск — выбрать пресет и запустить winws2
 :: Для полного управления (сервис, диагностика) используйте service.bat
 
 setlocal EnableDelayedExpansion
+
+:: Системные пути (не зависят от PATH)
+set "SYS32=%SystemRoot%\System32"
+set "PS_EXE=%SYS32%\WindowsPowerShell\v1.0\powershell.exe"
 
 set "BASE_DIR=%~dp0"
 if "%BASE_DIR:~-1%"=="\" set "BASE_DIR=%BASE_DIR:~0,-1%"
@@ -13,9 +17,9 @@ set "WINWS2_EXE=%BASE_DIR%\exe\winws2.exe"
 set "ACTIVE_PRESET=%BASE_DIR%\utils\preset-active.txt"
 set "STATE_FILE=%BASE_DIR%\utils\current_preset.txt"
 
-net.exe session >nul 2>&1
+%SYS32%\net.exe session >nul 2>&1
 if %errorlevel% neq 0 (
-    powershell.exe -NoProfile -Command "Start-Process '%~f0' -Verb RunAs"
+    %PS_EXE% -NoProfile -Command "Start-Process '%~f0' -Verb RunAs"
     exit /b
 )
 
@@ -35,7 +39,7 @@ if exist "%STATE_FILE%" (
     echo   Текущий: не выбран 2>nul
 )
 
-tasklist.exe /FI "IMAGENAME eq winws2.exe" 2>nul | find.exe /I "winws2.exe" >nul
+%SYS32%\tasklist.exe /FI "IMAGENAME eq winws2.exe" 2>nul | %SYS32%\find.exe /I "winws2.exe" >nul
 if %errorlevel% equ 0 (echo   winws2: ЗАПУЩЕН 2>nul) else (echo   winws2: ОСТАНОВЛЕН 2>nul)
 
 echo.
@@ -62,17 +66,17 @@ set /p "c=  Выбор (1-%count%): " 2>nul
 
 if /i "!c!"=="q" goto :eof
 if /i "!c!"=="m" (start "" "%BASE_DIR%\service.bat" & goto :eof)
-if /i "!c!"=="s" (taskkill.exe /F /IM winws2.exe >nul 2>&1 & timeout.exe /t 1 /nobreak >nul & goto menu)
+if /i "!c!"=="s" (%SYS32%\taskkill.exe /F /IM winws2.exe >nul 2>&1 & %SYS32%\timeout.exe /t 1 /nobreak >nul & goto menu)
 if /i "!c!"=="t" (start "" "tg://resolve?domain=vpndiscordyooutube" & goto menu)
 if /i "!c!"=="b" (start "" "tg://resolve?domain=bypassblock" & goto menu)
 if /i "!c!"=="v" (start "" "tg://resolve?domain=zapretvpns_bot" & goto menu)
 if /i "!c!"=="r" (
-    taskkill.exe /F /IM winws2.exe >nul 2>&1
-    timeout.exe /t 2 /nobreak >nul
-    for %%s in (WinDivert WinDivert14 Monkey Monkey14) do (sc.exe query "%%s" >nul 2>&1 && (net.exe stop "%%s" >nul 2>&1 & sc.exe delete "%%s" >nul 2>&1))
-    timeout.exe /t 1 /nobreak >nul
+    %SYS32%\taskkill.exe /F /IM winws2.exe >nul 2>&1
+    %SYS32%\timeout.exe /t 2 /nobreak >nul
+    for %%s in (WinDivert WinDivert14 Monkey Monkey14) do (%SYS32%\sc.exe query "%%s" >nul 2>&1 && (%SYS32%\net.exe stop "%%s" >nul 2>&1 & %SYS32%\sc.exe delete "%%s" >nul 2>&1))
+    %SYS32%\timeout.exe /t 1 /nobreak >nul
     if exist "%ACTIVE_PRESET%" (start "" /D "%BASE_DIR%" /MIN "%WINWS2_EXE%" @"%ACTIVE_PRESET%")
-    timeout.exe /t 2 /nobreak >nul
+    %SYS32%\timeout.exe /t 2 /nobreak >nul
     goto menu
 )
 
@@ -83,12 +87,12 @@ if "!valid!"=="0" goto menu
 set "SEL_NAME=!preset[%c%]!"
 set "SEL_PATH=!preset_path[%c%]!"
 
-taskkill.exe /F /IM winws2.exe >nul 2>&1
-timeout.exe /t 2 /nobreak >nul
-for %%s in (WinDivert WinDivert14 Monkey Monkey14) do (sc.exe query "%%s" >nul 2>&1 && (net.exe stop "%%s" >nul 2>&1 & sc.exe delete "%%s" >nul 2>&1))
-timeout.exe /t 1 /nobreak >nul
+%SYS32%\taskkill.exe /F /IM winws2.exe >nul 2>&1
+%SYS32%\timeout.exe /t 2 /nobreak >nul
+for %%s in (WinDivert WinDivert14 Monkey Monkey14) do (%SYS32%\sc.exe query "%%s" >nul 2>&1 && (%SYS32%\net.exe stop "%%s" >nul 2>&1 & %SYS32%\sc.exe delete "%%s" >nul 2>&1))
+%SYS32%\timeout.exe /t 1 /nobreak >nul
 copy /Y "!SEL_PATH!" "%ACTIVE_PRESET%" >nul
 echo !SEL_NAME!>"%STATE_FILE%"
 start "" /D "%BASE_DIR%" /MIN "%WINWS2_EXE%" @"%ACTIVE_PRESET%"
-timeout.exe /t 2 /nobreak >nul
+%SYS32%\timeout.exe /t 2 /nobreak >nul
 goto menu
